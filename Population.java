@@ -4,6 +4,7 @@ public class Population {
 	public static final int MAX = 10;
 
 	private String id;
+	private int type;
 	private int attack;
 	private int deffence;
 	private int hitPoint;
@@ -17,11 +18,12 @@ public class Population {
 	private String isMutation;
 
 	public Population(String id) {
-		int max = 200 + Main.generation - 1;
+		int max = 200 + (Main.generation - 1) * 10;
 
 		this.id = id;
 
 		Random random = new Random();
+		this.type = random.nextInt(3);
 		this.attack = random.nextInt(30)+1;
 		this.deffence = random.nextInt(20);
 		this.hitPoint = random.nextInt(50)+1;
@@ -36,11 +38,12 @@ public class Population {
 		this.isMutation = "";
 	}
 
-	public Population(String id, int a, int d, int h, int s) {
+	public Population(String id, int type, int a, int d, int h, int s) {
 		Random random = new Random();
-		int max = 200 + Main.generation - 1;
+		int max = 200 + Main.generation * 10;
 
 		this.id = id;
+		this.type = type;
 		this.attack = a + (random.nextInt(11) - 5);
 		if (this.attack <= 0) {
 			this.attack = 1;
@@ -125,11 +128,10 @@ public class Population {
 		}
 
 		int enemyHitPoint = this.enemy.getHitPoint();
-		this.enemy.addDamage(this.getAttack());
-		System.out.println(this.id + " attack -> " + this.enemy.getId() + "(" + enemyHitPoint + " -> " + this.enemy.getHitPoint() + ")");
+		this.enemy.addDamage(this);
+		System.out.println(this.id + "(" + this.getAttack() + ") -> " + this.enemy.getId() + "(" + enemyHitPoint + " -> " + this.enemy.getHitPoint() + ")");
 
 		if (enemyHitPoint == this.enemy.getHitPoint()) {
-			System.out.println("\t" + this.id + " could not cause damage to " + this.enemy.getId());
 			this.enemy = null;
 			return;
 		}
@@ -153,7 +155,7 @@ public class Population {
 
 	public void mutation(int type) {
 		Random random = new Random();
-		int max = 200 + Main.generation - 1;
+		int max = 200 + Main.generation * 10;
 
 		if ((type & 0x1) == 1) {
 			this.attack = random.nextInt(max) + 1;
@@ -171,6 +173,10 @@ public class Population {
 			this.speed = random.nextInt(max) + 1;
 		}
 
+		if ((type & 0x16) == 16) {
+			this.type = random.nextInt(3);
+		}
+
 		this.offset(max - (this.attack + this.deffence + this.hitPoint + this.speed));
 
 		this.isMutation = "◯";
@@ -178,6 +184,10 @@ public class Population {
 
 	public String getId() {
 		return this.id;
+	}
+
+	public int getType() {
+		return this.type;
 	}
 
 	public int getAttack() {
@@ -201,8 +211,17 @@ public class Population {
 		return this.speed;
 	}
 
-	public void addDamage(int d) {
-		int tmp = d - deffence;
+	public void addDamage(Population enemy) {
+		int tmp = enemy.getAttack() - this.deffence;
+
+		if ((this.type+1)%3 == enemy.getType()) {
+			tmp *= 2;
+			System.out.print("[効]");
+		} else if ((enemy.getType()+1)%3 == this.type) {
+			tmp /=2;
+			System.out.print("[×]");
+		}
+
 		this.damage += tmp < 0 ? 0 : tmp;
 	}
 

@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Beta extends Population {
 	public static int survivor = Population.MAX;
 	public static int gid = 1;
@@ -11,16 +13,17 @@ public class Beta extends Population {
 		Beta.survivor = Population.MAX;
 	}
 
-	public Beta(int a, int d, int h, int s) {
+	public Beta(int type, int a, int d, int h, int s) {
 		super(
 			"Beta-" + String.format("%03d", Beta.gid) + String.format("-%02d", Beta.id),
-			a, d, h, s);
+			type, a, d, h, s);
 		Beta.id++;
 		Beta.survivor = Population.MAX;
 	}
 
 	public Beta(Beta b1, Beta b2) {
 		this(
+			new Random().nextInt(2) == 0 ? b1.getType() : b2.getType(),
 			(b1.getAttack() + b2.getAttack()) / 2,
 			(b1.getDeffence() + b2.getDeffence()) / 2,
 			(b1.getOriginalHitPoint() + b2.getOriginalHitPoint()) / 2,
@@ -33,9 +36,6 @@ public class Beta extends Population {
 			int tmpIndex = (index+i) % Population.MAX;
 			Alpha enemy = enemyList[tmpIndex];
 			if (enemy.getHitPoint() > 0) {
-				if (enemy.getEnemy() == null) {
-					enemy.setEnemy(this);
-				}
 				this.enemy = enemy;
 				break;
 			}

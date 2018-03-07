@@ -60,12 +60,15 @@ public class Main {
 
 			double alpha_win = 0;
 			double beta_win = 0;
+			double draw = 0;
 			if (i!=0) {
 				alpha_win = (double)alpha_count / i * 100.0;
 				beta_win = (double)beta_count / i * 100.0;
+				draw = (double)(i - (alpha_count + beta_count)) / i * 100.0;
 			}
 			System.out.println("\tAlpha: " + String.format("%.2f", alpha_win) + "%(" + String.format("%.2f", alpha_average) + ")" +
-				"\tBeta: " + String.format("%.2f", beta_win) + "%(" + String.format("%.2f", beta_average) + ")");
+				"\tBeta: " + String.format("%.2f", beta_win) + "%(" + String.format("%.2f", beta_average) + ")" +
+				"\tDraw: " + String.format("%.2f", draw) + "%");
 			System.out.println("================");
 			Thread.sleep(700);
 
@@ -139,26 +142,29 @@ public class Main {
 				Beta p_beta1 = beta[expectations[random.nextInt(100)]];
 				Beta p_beta2 = beta[expectations[random.nextInt(100)]];
 
-				Alpha c_alpha1 = new Alpha(p_alpha1.getAttack(), p_alpha2.getDeffence(), p_alpha1.getOriginalHitPoint(), p_alpha2.getSpeed());
-				Alpha c_alpha2 = new Alpha(p_alpha2.getAttack(), p_alpha1.getDeffence(), p_alpha2.getOriginalHitPoint(), p_alpha1.getSpeed());
+				int[] alpha_types = { p_alpha1.getType(), p_alpha2.getType() };
+				int[] beta_types = { p_beta1.getType(), p_beta2.getType() };
 
-				Beta c_beta1 = new Beta(p_beta1.getAttack(), p_beta2.getDeffence(), p_beta1.getOriginalHitPoint(), p_beta2.getSpeed());
-				Beta c_beta2 = new Beta(p_beta2.getAttack(), p_beta1.getDeffence(), p_beta2.getOriginalHitPoint(), p_beta1.getSpeed());
+				Alpha c_alpha1 = new Alpha(alpha_types[random.nextInt(2)], p_alpha1.getAttack(), p_alpha2.getDeffence(), p_alpha1.getOriginalHitPoint(), p_alpha2.getSpeed());
+				Alpha c_alpha2 = new Alpha(alpha_types[random.nextInt(2)], p_alpha2.getAttack(), p_alpha1.getDeffence(), p_alpha2.getOriginalHitPoint(), p_alpha1.getSpeed());
+
+				Beta c_beta1 = new Beta(beta_types[random.nextInt(2)], p_beta1.getAttack(), p_beta2.getDeffence(), p_beta1.getOriginalHitPoint(), p_beta2.getSpeed());
+				Beta c_beta2 = new Beta(beta_types[random.nextInt(2)], p_beta2.getAttack(), p_beta1.getDeffence(), p_beta2.getOriginalHitPoint(), p_beta1.getSpeed());
 
 				if (random.nextDouble() < 0.05) {
-					c_alpha1.mutation(random.nextInt(16));
+					c_alpha1.mutation(random.nextInt(32));
 				}
 
 				if (random.nextDouble() < 0.05) {
-					c_alpha2.mutation(random.nextInt(16));
+					c_alpha2.mutation(random.nextInt(32));
 				}
 
 				if (random.nextDouble() < 0.05) {
-					c_beta1.mutation(random.nextInt(16));
+					c_beta1.mutation(random.nextInt(32));
 				}
 
 				if (random.nextDouble() < 0.05) {
-					c_beta2.mutation(random.nextInt(16));
+					c_beta2.mutation(random.nextInt(32));
 				}
 
 				nextAlpha[j] = c_alpha1;
