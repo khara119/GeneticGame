@@ -11,6 +11,8 @@ public class Population {
 	private int damage;
 	protected Population enemy;
 	private int win;
+	private int attackCount;
+	private int absorbCount;
 	private int lose;
 	private String isMutation;
 
@@ -64,6 +66,8 @@ public class Population {
 		this.damage = 0;
 		this.enemy = null;
 		this.win = 0;
+		this.attackCount = 0;
+		this.absorbCount = 0;
 		this.lose = 0;
 		this.isMutation = "";
 	}
@@ -198,12 +202,20 @@ public class Population {
 		this.win++;
 	}
 
+	public void addAttackCount() {
+		this.attackCount++;
+	}
+
+	public void addAbsorbCount() {
+		this.absorbCount++;
+	}
+
 	public void addLose() {
 		this.lose++;
 	}
 
 	public int getScore() {
-		return this.win - this.lose;
+		return this.win*10 + this.attackCount*2 + this.absorbCount - this.lose*10;
 	}
 
 	public String toString() {
