@@ -133,6 +133,9 @@ public class Population {
 				Alpha.survivor--;
 			}
 			this.enemy = null;
+		} else if (enemyHitPoint == this.enemy.getHitPoint()) {
+			System.out.println("\t" + this.id + " cause damage to " + this.enemy.getId());
+			this.enemy = null;
 		}
 	}
 
