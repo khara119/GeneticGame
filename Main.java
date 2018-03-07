@@ -139,16 +139,6 @@ public class Main {
 				Beta p_beta1 = beta[expectations[random.nextInt(100)]];
 				Beta p_beta2 = beta[expectations[random.nextInt(100)]];
 
-				if (Beta.survivor == 0) {
-					p_alpha1 = alpha[random.nextInt(10)];
-					p_alpha2 = alpha[random.nextInt(10)];
-				}
-
-				if (Alpha.survivor == 0) {
-					p_beta1 = beta[random.nextInt(10)];
-					p_beta2 = beta[random.nextInt(10)];
-				}
-
 				Alpha c_alpha1 = new Alpha(p_alpha1.getAttack(), p_alpha2.getDeffence(), p_alpha1.getOriginalHitPoint(), p_alpha2.getSpeed());
 				Alpha c_alpha2 = new Alpha(p_alpha2.getAttack(), p_alpha1.getDeffence(), p_alpha2.getOriginalHitPoint(), p_alpha1.getSpeed());
 

@@ -127,6 +127,15 @@ public class Population {
 		int enemyHitPoint = this.enemy.getHitPoint();
 		this.enemy.addDamage(this.getAttack());
 		System.out.println(this.id + " attack -> " + this.enemy.getId() + "(" + enemyHitPoint + " -> " + this.enemy.getHitPoint() + ")");
+
+		if (enemyHitPoint == this.enemy.getHitPoint()) {
+			System.out.println("\t" + this.id + " could not cause damage to " + this.enemy.getId());
+			this.enemy = null;
+			return;
+		}
+
+		this.addAttackCount();
+
 		if (this.enemy.getHitPoint() <= 0) {
 			System.out.println("\t" + this.id + " Win : Lose " + this.enemy.getId());
 			this.addWin();
@@ -137,9 +146,8 @@ public class Population {
 				Alpha.survivor--;
 			}
 			this.enemy = null;
-		} else if (enemyHitPoint == this.enemy.getHitPoint()) {
-			System.out.println("\t" + this.id + " cause damage to " + this.enemy.getId());
-			this.enemy = null;
+		} else {
+			this.enemy.addAbsorbCount();
 		}
 	}
 
